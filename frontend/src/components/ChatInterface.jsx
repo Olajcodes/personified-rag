@@ -15,25 +15,39 @@ const ChatInterface = () => {
 
   const handleSend = async () => {
     if (!input.trim()) return;
-    
-    const userMsg = { role: 'user', content: input };
-    setMessages(prev => [...prev, userMsg]);
-    setInput('');
+
+    // 1. DEFINE newHistory FIRST
+    // We create this variable here so we can use it in both setMessages AND fetch
+    const newHistory = [...messages, { role: "user", content: input }];
+
+    // 2. Update the UI
+    setMessages(newHistory);
+    setInput("");
     setIsLoading(true);
 
     try {
-        // Connect to your real Backend API here
-        // const response = await fetch('http://localhost:8000/chat', { ... })
-        
-        // Mocking the Backend Response for now to demonstrate Citations
-        setTimeout(() => {
-            const mockResponse = "I am still being worked on. Coming up very soon!";
-            setMessages(prev => [...prev, { role: 'ai', content: mockResponse }]);
-            setIsLoading(false);
-        }, 1000);
-    } catch (e) {
-        console.error(e);
-        setIsLoading(false);
+      // Connect to your real Backend API here
+      const response = await fetch("http://localhost:8000/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          question: input,
+          // 3. Now we can safely use newHistory here because it was defined above
+          history: newHistory, 
+        }),
+      });
+
+      if (!response.ok) throw new Error("Network response was not ok");
+
+      const data = await response.json();
+
+      // 4. Add AI response
+      setMessages((prev) => [...prev, { role: "assistant", content: data.answer }]);
+    } catch (error) {
+      console.error("Error:", error);
+      setMessages((prev) => [...prev, { role: "assistant", content: "Error connecting to server." }]);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -72,7 +86,8 @@ const ChatInterface = () => {
       <div className="flex-1 overflow-y-auto p-4 space-y-6">
         {messages.map((msg, idx) => (
           <div key={idx} className={`flex gap-3 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-            {msg.role === 'ai' && (
+            {/* Check for both 'ai' (initial state) and 'assistant' (backend response) */}
+            {(msg.role === 'ai' || msg.role === 'assistant') && (
               <div className="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center shrink-0">
                 <Bot size={16} />
               </div>
