@@ -1,11 +1,5 @@
 # Olajcodes AI Assistant (RAG)
 
-![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
-![FastAPI](https://img.shields.io/badge/FastAPI-0.95%2B-green)
-![React](https://img.shields.io/badge/React-18-blue)
-![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4o-orange)
-![License](https://img.shields.io/badge/License-Proprietary-red)
-
 ## 📄 Overview
 
 This project is a **Privacy-First Retrieval-Augmented Generation (RAG)** system designed to act as an AI portfolio assistant for **OlajCodes**. It aggregates professional knowledge from **GitHub repositories** and **LinkedIn profiles** to answer inquiries about skills, projects, and experience, while strictly enforcing privacy guardrails to protect Personally Identifiable Information (PII).
@@ -24,20 +18,6 @@ This project is a **Privacy-First Retrieval-Augmented Generation (RAG)** system 
 * **🧠 Context-Aware:** Uses **LangChain** and **ChromaDB** for semantic search and retrieval.
 * **💬 Conversational Memory:** Remembers context across the chat session.
 * **⚡ High Performance:** Powered by **OpenAI GPT-4o** and **OpenAI Embeddings**.
-
----
-
-## 🏗️ Architecture
-
-```mermaid
-graph LR
-    User[Frontend (React)] -- JSON --> API[Backend (FastAPI)]
-    API -- Query --> Chain[LangChain RAG]
-    Chain -- Retrieve --> DB[(ChromaDB Vector Store)]
-    Chain -- Context + Prompt --> LLM[OpenAI GPT-4o]
-    LLM -- Response --> API
-    API -- Answer --> User
-````
 
 -----
 
@@ -129,9 +109,9 @@ npm run dev
 
 -----
 
-## 🔒 Privacy Implementation (PRD Compliance)
+## 🔒 Privacy Implementation
 
-Per the Product Requirements Document, the system implements a **Strict Refusal Policy** at the System Prompt level.
+The system implements a **Strict Refusal Policy** at the System Prompt level.
 
 **System Prompt Snippet:**
 
@@ -190,5 +170,4 @@ Sends a user query to the RAG chain.
 This project is proprietary and confidential.
 Copyright © 2025 OlajCodes.
 
-```
 ```
