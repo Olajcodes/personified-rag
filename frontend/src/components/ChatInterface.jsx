@@ -45,7 +45,7 @@ const ChatInterface = () => {
       setMessages((prev) => [...prev, { role: "assistant", content: data.answer }]);
     } catch (error) {
       console.error("Error:", error);
-      setMessages((prev) => [...prev, { role: "assistant", content: "Error connecting to server." }]);
+      setMessages((prev) => [...prev, { role: "assistant", content: "I am still being worked on. Coming Up Soon." }]);
     } finally {
       setIsLoading(false);
     }
