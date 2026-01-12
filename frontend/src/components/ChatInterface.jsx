@@ -33,11 +33,20 @@ const ChatInterface = () => {
         body: JSON.stringify({
           question: input,
           // 3. Now we can safely use newHistory here because it was defined above
-          history: newHistory, 
+          history: newHistory,
         }),
       });
 
-      if (!response.ok) throw new Error("Network response was not ok");
+      if (!response.ok) {
+        let errorMsg = `Server Error: ${response.statusText}`;
+        try {
+          const errorData = await response.json();
+          if (errorData.detail) errorMsg = errorData.detail;
+        } catch (e) {
+          // data wasn't JSON, use default statusText
+        }
+        throw new Error(errorMsg);
+      }
 
       const data = await response.json();
 
@@ -45,7 +54,16 @@ const ChatInterface = () => {
       setMessages((prev) => [...prev, { role: "assistant", content: data.answer }]);
     } catch (error) {
       console.error("Error:", error);
-      setMessages((prev) => [...prev, { role: "assistant", content: "I am still being worked on. Coming Up Soon." }]);
+      let errorMessage = "Service momentarily unavailable. Please try again.";
+
+      // Show the message from the backend if available, otherwise generic
+      if (error.message && error.message !== "Failed to fetch") {
+        errorMessage = error.message;
+      } else if (error.message === "Failed to fetch") {
+        errorMessage = "Connection error. Please check your internet or server status.";
+      }
+
+      setMessages((prev) => [...prev, { role: "assistant", content: errorMessage }]);
     } finally {
       setIsLoading(false);
     }
@@ -55,7 +73,7 @@ const ChatInterface = () => {
   const renderMessage = (text) => {
     // Regex to find [Source: ...] patterns
     const parts = text.split(/(\[Source: [^\]]+\])/g);
-    
+
     return parts.map((part, index) => {
       if (part.startsWith('[Source:')) {
         // Render citation as a nice badge
@@ -92,12 +110,11 @@ const ChatInterface = () => {
                 <Bot size={16} />
               </div>
             )}
-            
-            <div className={`max-w-[80%] p-4 rounded-2xl leading-relaxed ${
-              msg.role === 'user' 
-                ? 'bg-blue-600 text-white rounded-br-none' 
-                : 'bg-gray-800 text-gray-100 rounded-bl-none border border-gray-700'
-            }`}>
+
+            <div className={`max-w-[80%] p-4 rounded-2xl leading-relaxed ${msg.role === 'user'
+              ? 'bg-blue-600 text-white rounded-br-none'
+              : 'bg-gray-800 text-gray-100 rounded-bl-none border border-gray-700'
+              }`}>
               {renderMessage(msg.content)}
             </div>
 
@@ -123,7 +140,7 @@ const ChatInterface = () => {
             placeholder="Ask me about his skills, projects, or experience..."
             className="flex-1 bg-gray-800 border-none rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none placeholder-gray-500"
           />
-          <button 
+          <button
             onClick={handleSend}
             disabled={!input.trim()}
             className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white p-3 rounded-xl transition-colors"
