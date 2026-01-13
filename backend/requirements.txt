@@ -10,7 +10,7 @@ chromadb
 pydantic
 requests
 tiktoken
-
+sentence-transformers
 # Only install this on Linux (Render), skip on Windows
 pysqlite3-binary ; sys_platform == 'linux'
 
