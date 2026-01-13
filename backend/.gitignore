@@ -9,7 +9,3 @@ env/
 # Bytecode
 __pycache__/
 *.pyc
-
-# Vector Database (Too large to upload, generate it on deployment)
-chroma_db/
-temp_repo/

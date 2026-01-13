@@ -1,30 +1,43 @@
 import os
+import sys
+import shutil
 from typing import List, Optional
-from fastapi import FastAPI, HTTPException, Header, Depends
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from dotenv import load_dotenv
 from operator import itemgetter
 
+# --- CHROMA DB FIX FOR RENDER (Linux Only) ---
+# This fixes the "Old SQLite" error on Render without breaking your Windows local setup
+if sys.platform == "linux":
+    try:
+        __import__('pysqlite3')
+        sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+    except ImportError:
+        pass
+
 # LangChain Imports
-from langchain_openai import ChatOpenAI, OpenAIEmbeddings
+from langchain_openai import ChatOpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_chroma import Chroma
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.messages import HumanMessage, AIMessage
 
-# Load Environment Variables (We keep this for the server setup, but won't use the key for chat)
+# Load Environment Variables
 load_dotenv()
-# Load new variable
-ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD")
-SERVER_API_KEY = os.getenv("OPENAI_API_KEY")
 
-if not ADMIN_PASSWORD:
-    print("WARNING: ADMIN_PASSWORD not set in .env. Admin bypass disabled.")
+# API Keys
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
+# Configuration
 PERSIST_DIRECTORY = "./chroma_db"
 
-app = FastAPI(title="OlajCodes AI Backend (BYOK)", version="1.0.0")
+app = FastAPI(title="OlajCodes AI Backend (Render)", version="3.1.0")
 
 # --- CORS ---
 app.add_middleware(
@@ -35,18 +48,24 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# --- Embeddings ---
+def get_embeddings():
+    # Using Local Embeddings to match ingest.py
+    return HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+
 # --- System Prompt ---
 system_prompt_text = """
 You are a professional assistant representing a developer. Your knowledge is based STRICTLY on the provided context.
 
-### PRIVACY GUARDRAILS:
-You MUST REFUSE to answer questions about the following personal sensitive information:
-- Age / Date of birth
-- Home Address
-- Phone number / Personal Email
+### GUIDELINES:
+- Output clear, well-structured text.
+- Do NOT use asterisks (e.g., **bold**, *italics*) unless necessary for code.
+- If context is missing, say "I don't have that information."
 
-If a user asks for this information, reply EXACTLY with:
-"I cannot share personal or sensitive information. Please ask about my professional experience or projects."
+### PRIVACY GUARDRAILS:
+You MUST REFUSE to answer questions about:
+- Age / Date of birth / Home Address / Phone number / Personal Email
+Reply EXACTLY with: "I cannot share personal or sensitive information. Please ask about my professional experience."
 
 Context:
 {context}
@@ -61,7 +80,7 @@ prompt_template = ChatPromptTemplate.from_messages([
 def format_docs(docs):
     return "\n\n".join(doc.page_content for doc in docs)
 
-# --- API Models ---
+# --- Models ---
 class Message(BaseModel):
     role: str
     content: str
@@ -69,35 +88,46 @@ class Message(BaseModel):
 class ChatRequest(BaseModel):
     question: str
     history: Optional[List[Message]] = []
+    model: Optional[str] = "google/gemini-2.0-flash-001"
 
-# --- Dynamic Chain Creator ---
-def get_chain_for_user(api_key: str):
-    """
-    Creates the RAG chain dynamically using the user's specific API key.
-    """
-    try:
-        # 1. Initialize Embeddings with User's Key
-        user_embeddings = OpenAIEmbeddings(
-            model="text-embedding-3-small",
-            openai_api_key=api_key
+# --- LLM Factory ---
+def get_llm_chain(model_preference: str):
+    # 1. OpenRouter (Primary)
+    if OPENROUTER_API_KEY:
+        return ChatOpenAI(
+            model=model_preference,
+            openai_api_key=OPENROUTER_API_KEY,
+            base_url="https://openrouter.ai/api/v1",
+            temperature=0,
+            default_headers={"HTTP-Referer": "https://olajcodes.com", "X-Title": "OlajCodes AI"}
+        )
+    
+    # 2. Google Fallback
+    if GOOGLE_API_KEY:
+        return ChatGoogleGenerativeAI(
+            model="gemini-1.5-flash",
+            google_api_key=GOOGLE_API_KEY,
+            temperature=0
         )
 
-        # 2. Connect to Vector Store with User's Embeddings
-        # We only READ from the DB, so we re-use the persist directory
+    raise ValueError("No API Keys configured on Render!")
+
+# --- RAG Chain ---
+def get_rag_chain(user_model_preference: str):
+    try:
+        # Check if DB exists
+        if not os.path.exists(PERSIST_DIRECTORY):
+            print("WARNING: chroma_db not found. Answering without context.")
+            # Return a simple chain that just asks the LLM without context
+            return get_llm_chain(user_model_preference) | StrOutputParser()
+
+        embeddings = get_embeddings()
         vectorstore = Chroma(
             persist_directory=PERSIST_DIRECTORY,
-            embedding_function=user_embeddings
+            embedding_function=embeddings
         )
         retriever = vectorstore.as_retriever(search_kwargs={"k": 4})
-
-        # 3. Initialize LLM with User's Key
-        llm = ChatOpenAI(
-            model="gpt-4o",
-            temperature=0,
-            openai_api_key=api_key
-        )
-
-        # 4. Build Chain
+        
         chain = (
             {
                 "context": itemgetter("question") | retriever | format_docs,
@@ -105,59 +135,33 @@ def get_chain_for_user(api_key: str):
                 "question": itemgetter("question")
             }
             | prompt_template
-            | llm
+            | get_llm_chain(user_model_preference)
             | StrOutputParser()
         )
         return chain
     except Exception as e:
-        raise HTTPException(status_code=401, detail=f"Invalid API Key or OpenAI Error: {str(e)}")
+        print(f"Chain Error: {e}")
+        raise e
 
-# --- Helper to determine which key to use ---
-def resolve_api_key(auth_token: str):
-    """
-    Decides whether to use the Server Key (Admin) or the User's Key.
-    """
-    if not auth_token:
-        raise HTTPException(status_code=401, detail="Authentication required (API Key or Admin Password).")
-
-    # 1. Check if token matches Admin Password
-    if auth_token == ADMIN_PASSWORD:
-        if not SERVER_API_KEY:
-            raise HTTPException(status_code=500, detail="Server API Key is not configured.")
-        return SERVER_API_KEY
-    
-    # 2. Otherwise, treat token as a User API Key
-    # Basic validation to reject obvious non-keys
-    if not auth_token.startswith("sk-"):
-        raise HTTPException(status_code=401, detail="Invalid OpenAI API Key format.")
-    
-    return auth_token
-
-# --- Updated Endpoint ---
+# --- Endpoint ---
 @app.post("/chat")
-async def chat_endpoint(
-    request: ChatRequest, 
-    # specific header for the token
-    x_auth_token: str = Header(None, alias="x-auth-token") 
-):
+async def chat_endpoint(request: ChatRequest):
     try:
-        # 1. Determine the correct API Key to use
-        active_api_key = resolve_api_key(x_auth_token)
-
-        # 2. Convert History
         chat_history_objects = []
         for msg in request.history:
             if msg.role == "user":
                 chat_history_objects.append(HumanMessage(content=msg.content))
-            elif msg.role == "assistant" or msg.role == "ai":
+            elif msg.role in ["assistant", "ai"]:
                 chat_history_objects.append(AIMessage(content=msg.content))
 
-        # 3. Get Chain (using the resolved key)
-        # Note: We pass the resolved key to our chain creator
-        user_chain = get_chain_for_user(active_api_key)
+        rag_chain = get_rag_chain(request.model)
 
-        # 4. Invoke
-        response_text = user_chain.invoke({
+        # Handle simple LLM fallback (if DB is missing)
+        if isinstance(rag_chain, (ChatOpenAI, ChatGoogleGenerativeAI)):
+             response_text = rag_chain.invoke(request.question)
+             return {"answer": response_text.content}
+
+        response_text = rag_chain.invoke({
             "question": request.question,
             "chat_history": chat_history_objects
         })
@@ -165,4 +169,5 @@ async def chat_endpoint(
         return {"answer": response_text}
 
     except Exception as e:
+        print(f"Error: {e}")
         raise HTTPException(status_code=500, detail=str(e))

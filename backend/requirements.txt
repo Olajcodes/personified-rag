@@ -1,14 +1,19 @@
 fastapi
 uvicorn
+python-dotenv
 langchain
 langchain-openai
-langchain-community
-langchain-text-splitters
-tiktoken
-pydantic
+langchain-google-genai
+langchain-huggingface
+langchain-chroma
 chromadb
-python-dotenv
+pydantic
+requests
 tiktoken
+
+# Only install this on Linux (Render), skip on Windows
+pysqlite3-binary ; sys_platform == 'linux'
+
 # For GitHub and LinkedIn (PDF/Text) loading
 pypdf
 gitpython
