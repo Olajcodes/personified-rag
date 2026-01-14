@@ -9,6 +9,7 @@ langchain-chroma
 chromadb
 pydantic
 requests
+python-docx
 tiktoken
 sentence-transformers
 # Only install this on Linux (Render), skip on Windows
@@ -17,4 +18,3 @@ pysqlite3-binary ; sys_platform == 'linux'
 # For GitHub and LinkedIn (PDF/Text) loading
 pypdf
 gitpython
-
