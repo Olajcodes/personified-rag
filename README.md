@@ -1,173 +1,134 @@
-# Olajcodes AI Assistant (RAG)
+# ✨ OlajCodes AI: The Autonomous Portfolio Agent
 
-## 📄 Overview
+![Project Status](https://img.shields.io/badge/Status-Live-green)
+![Tech Stack](https://img.shields.io/badge/Stack-FastAPI%20|%20React%20|%20LangChain-blue)
+![AI Model](https://img.shields.io/badge/AI-GPT--4o-purple)
 
-This project is a **Privacy-First Retrieval-Augmented Generation (RAG)** system designed to act as an AI portfolio assistant for **OlajCodes**. It aggregates professional knowledge from **GitHub repositories** and **LinkedIn profiles** to answer inquiries about skills, projects, and experience, while strictly enforcing privacy guardrails to protect Personally Identifiable Information (PII).
+> **"Don't just read my CV. Interview my AI agent."**
 
-**Live Demo:** [olajcodes-ai.vercel.app](https://olajcodes-ai.vercel.app)
+This is not a static portfolio website. It is an **autonomous RAG (Retrieval-Augmented Generation) Agent** that represents me professionally. It ingests my entire digital footprint (GitHub code, LinkedIn profile, Technical Articles), indexes it into a Vector Database, and uses it to answer recruiter questions and generate tailored documents in real-time.
 
 ---
 
-## ✨ Key Features
+## 🚀 Key Features
 
-* **📚 Multi-Source Knowledge Base:** Ingests codebases (GitHub) and professional resumes (LinkedIn PDF).
-* **🛡️ Privacy Guardrails:** Engineered via System Prompts to **refuse** answering questions about:
-    * Home Address / Physical Location
-    * Personal Phone Numbers & Emails
-    * Age & Date of Birth
-* **🧠 Context-Aware:** Uses **LangChain** and **ChromaDB** for semantic search and retrieval.
-* **💬 Conversational Memory:** Remembers context across the chat session.
-* **⚡ High Performance:** Powered by **OpenAI GPT-4o** and **OpenAI Embeddings**.
+### 1. 🧠 Evidence-Based RAG Chat
+Unlike generic chatbots, this agent **cannot hallucinate**.
+* **Strict Grounding:** Every claim is cross-referenced with my actual data.
+* **Citations:** Responses include clickable citations (e.g., `[Source: main.py]`, `[Source: Profile.pdf]`) proving I actually did the work.
 
------
+### 2. 📄 Tailored Document Generation
+The "Killer Feature" for recruiters:
+* **Input:** Paste any Job Description (JD).
+* **Process:** The AI maps my skills to the JD requirements.
+* **Output:** Instantly downloads a **Tailored CV (.docx)** and **Persuasive Cover Letter (.docx)** optimized for that specific role.
 
-## 🛠️ Tech Stack
+### 3. 🛡️ Intelligent Guardrails ("The Gatekeeper")
+The agent acts as a professional filter:
+* **Relevance Check:** If a user pastes a JD for a non-tech role (e.g., "Nurse" or "Chef"), the AI **refuses to generate documents**, explaining that the role does not align with my expertise.
+* **Privacy:** It is programmed to withhold sensitive personal data (phone number, home address) unless specifically authorized.
 
-| Component | Technology |
-| :--- | :--- |
-| **Frontend** | React.js, Tailwind CSS, Lucide Icons |
-| **Backend** | Python (FastAPI), Uvicorn |
-| **Orchestration** | LangChain, LCEL (LangChain Expression Language) |
-| **Vector DB** | ChromaDB |
-| **LLM Provider** | OpenAI (gpt-4o) & Embeddings (text-embedding-3-small) |
+### 4. 🎨 Modern Dual-Theme UI
+* **Dynamic Theming:** Seamless toggle between a crisp **Corporate Light Mode** (White/Green) and an immersive **Developer Dark Mode** (Gray/Emerald).
+* **Responsive:** Fully mobile-optimized sidebar and chat interface.
 
------
+---
 
-## 🚀 Getting Started
+## 🏗️ System Architecture
 
-### Prerequisites
+The system follows a standard RAG pipeline optimized for accuracy:
 
-  * Python 3.10+
-  * Node.js & npm
-  * OpenAI API Key
-
-### 1\. Backend Setup
-
-Navigate to the backend directory:
-
-```bash
-cd backend
+```mermaid
+graph LR
+    A[Data Sources] -->|Ingest| B(LangChain Loader)
+    B -->|Chunking| C(Text Splitter)
+    C -->|Embed| D[OpenAI Embeddings]
+    D -->|Store| E[(ChromaDB Vector Store)]
+    
+    User[User Query/JD] -->|Search| E
+    E -->|Retrieve Context| F{GPT-4o Logic}
+    F -->|Answer| Chat[Chat Response]
+    F -->|Generate| Doc[Tailored .docx]
 ```
 
-Create and activate a virtual environment:
+  1. Ingestion: Scrapes my GitHub repos, parses my LinkedIn PDF, and reads local Markdown notes.
+  
+  2. Embedding: Uses text-embedding-3-small to convert text into vector space.
+  
+  3. Retrieval: ChromaDB performs semantic search to find relevant experience.
+  
+  4. Generation: GPT-4o synthesizes the answer or drafts the document using python-docx.
+  
+  ## 🛠️ Tech Stack
+  
+  **Backend (Python)**
+  - FastAPI: High-performance async API framework.
+  
+  - LangChain: Framework for RAG logic and chain orchestration.
+  
+  - ChromaDB: Local vector database for context storage.
+  
+  - OpenAI API: LLM (GPT-4o) and Embeddings.
+  
+  - Python-docx: Programmatic document creation.
+  
+  **Frontend (React)**
+  - Vite + React: Fast, modern frontend build tool.
+  
+  - Tailwind CSS: Utility-first styling for the custom "Green/Emerald" theme.
+  
+  - Lucide React: Beautiful, consistent iconography.Fetch API: For streaming responses and file downloads.
+  
+  ## ⚡ Quick Start
+  **Prerequisites**
+  Python 3.10+Node.js 18+
+  
+  OpenAI API Key
+  
+  1. Clone & Setup Backend
+  ```Bash
+  git clone [https://github.com/Olajcodes/personified-rag.git](https://github.com/Olajcodes/personified-rag.git)
+  cd personified-rag/backend
+  ```
 
-```bash
-# macOS/Linux
+# Create Virtual Env
+```Bash
 python -m venv venv
-source venv/bin/activate
-
-# Windows
-python -m venv venv
-venv\Scripts\activate
+source venv/bin/activate  # or venv\Scripts\activate on Windows
 ```
 
-Install Dependencies:
-
-```bash
+# Install Dependencies
+```Bash
 pip install -r requirements.txt
 ```
 
-**Configure Environment Variables:**
-Create a `.env` file in the `backend` folder:
+# Set API Key
+# Create a .env file and add: OPENAI_API_KEY=sk-proj-...
 
-```ini
-OPENAI_API_KEY=sk-proj-your-key-here
+2. Ingest DataBefore running the server, you must build the "Brain" (Vector DB).
+```Bash
+python ingest.py
 ```
 
-**Generate the Vector Database:**
-Run the Jupyter Notebook `RAG_System.ipynb` to scrape GitHub/LinkedIn and save the embeddings to the `./chroma_db` folder.
-
-**Run the Server:**
-
-```bash
+# You should see: "Success! Database created."
+3. Run ServersBackend:
+```Bash
 uvicorn main:app --reload
 ```
-
-*The server will start at `http://localhost:8000`*
-
-### 2\. Frontend Setup
-
-Navigate to the frontend directory:
-
-```bash
-cd frontend
-```
-
-Install Dependencies:
-
-```bash
+# Running on http://localhost:8000
+Frontend:
+```Bash
+cd ../frontend
 npm install
-```
-
-Run Development Server:
-
-```bash
 npm run dev
 ```
+# Running on http://localhost:5173
 
-*The frontend will run at `http://localhost:5137`*
-
------
-
-## 🔒 Privacy Implementation
-
-The system implements a **Strict Refusal Policy** at the System Prompt level.
-
-**System Prompt Snippet:**
-
-```plaintext
-### PRIVACY GUARDRAILS:
-You MUST REFUSE to answer questions about the following personal sensitive information:
-- Age / Date of birth
-- Home Address
-- Phone number / Personal Email
-
-If a user asks for this information, reply EXACTLY with:
-"I cannot share personal or sensitive information such as contact details or age. Please ask about my professional experience or projects."
-```
-
------
-
-## 📡 API Reference
-
-### `POST /chat`
-
-Sends a user query to the RAG chain.
-
-**Request Body:**
-
-```json
-{
-  "question": "What is his experience with Python?",
-  "history": [
-    {"role": "user", "content": "Hi"},
-    {"role": "assistant", "content": "Hello!"}
-  ]
-}
-```
-
-**Response:**
-
-```json
-{
-  "answer": "He has 4 years of experience with Python, specifically building RAG pipelines... [Source: resume.pdf]"
-}
-```
-
------
-
-## 📦 Deployment
-
-1.  **Backend:** Deploy to Render, Railway, or AWS.
-      * *Important:* Ensure the `chroma_db` folder is generated during the build process or uploaded with the codebase.
-2.  **Frontend:** Deploy to Vercel or Netlify.
-      * Update the fetch URL in `ChatInterface.jsx` to point to your production backend URL.
-
------
+📸 ScreenshotsLanding Page
 
 ## 📄 License
 
 This project is proprietary and confidential.
-Copyright © 2025 OlajCodes.
+Copyright © 2026 OlajCodes.
 
 ```
