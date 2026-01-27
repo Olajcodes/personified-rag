@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Send, ShieldCheck, User, Bot, FileText, Briefcase, ChevronRight, Loader2, X, AlertCircle, ArrowLeft, Sun, Moon } from 'lucide-react';
 
-const API_BASE_URL = "http://localhost:8000"; 
+const API_BASE_URL = "https://olajcodes-backend.onrender.com"; 
 
 const ChatInterface = ({ onBack, isDarkMode, toggleTheme }) => {
   const [messages, setMessages] = useState([
