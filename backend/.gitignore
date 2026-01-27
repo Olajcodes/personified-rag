@@ -2,10 +2,10 @@
 .env
 
 # Python Virtual Environment
-venv/
 a_venv/
-env/
 
 # Bytecode
 __pycache__/
 *.pyc
+
+temp_repo
