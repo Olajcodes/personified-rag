@@ -77,58 +77,64 @@ graph LR
   
   - Tailwind CSS: Utility-first styling for the custom "Green/Emerald" theme.
   
-  - Lucide React: Beautiful, consistent iconography.Fetch API: For streaming responses and file downloads.
+  - Lucide React: Beautiful, consistent iconography.
+  
+  - Fetch API: For streaming responses and file downloads.
   
   ## ⚡ Quick Start
   **Prerequisites**
-  Python 3.10+Node.js 18+
+  - Python 3.10+
   
-  OpenAI API Key
+  - Node.js 18+
+  
+  - OpenAI API Key
   
   1. Clone & Setup Backend
   ```Bash
   git clone [https://github.com/Olajcodes/personified-rag.git](https://github.com/Olajcodes/personified-rag.git)
   cd personified-rag/backend
   ```
+  2. Create Virtual Env
+  ```Bash
+  python -m venv venv
+  source venv/bin/activate  # or venv\Scripts\activate on Windows
+  ```
 
-# Create Virtual Env
-```Bash
-python -m venv venv
-source venv/bin/activate  # or venv\Scripts\activate on Windows
-```
+ 3. Install Dependencies
+  ```Bash
+  pip install -r requirements.txt
+  ```
 
-# Install Dependencies
-```Bash
-pip install -r requirements.txt
-```
+4. Set API Key
+- Create a .env file and add: OPENAI_API_KEY=sk-proj-...
 
-# Set API Key
-# Create a .env file and add: OPENAI_API_KEY=sk-proj-...
+5. Ingest Data Before running the server, you must build the "Brain" (Vector DB).
+  ```Bash
+  python ingest.py
+  ```
 
-2. Ingest DataBefore running the server, you must build the "Brain" (Vector DB).
-```Bash
-python ingest.py
-```
+6. You should see: "Success! Database created."
 
-# You should see: "Success! Database created."
-3. Run ServersBackend:
-```Bash
-uvicorn main:app --reload
-```
-# Running on http://localhost:8000
+**Run Servers**
+Backend:
+  ```Bash
+  uvicorn main:app --reload
+  ```
+ Running on http://localhost:8000
+
 Frontend:
-```Bash
-cd ../frontend
-npm install
-npm run dev
-```
-# Running on http://localhost:5173
+  ```Bash
+  cd ../frontend
+  npm install
+  npm run dev
+  ```
+ Running on http://localhost:5173
 
-📸 ScreenshotsLanding Page
+![1769550052886](image/README/1769550052886.png)
 
+![1769550091723](image/README/1769550091723.png)
 ## 📄 License
 
 This project is proprietary and confidential.
 Copyright © 2026 OlajCodes.
-
 ```
