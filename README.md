@@ -1,4 +1,4 @@
-# ✨ OlajCodes AI: The Autonomous Portfolio Agent
+# OlajCodes AI: The Autonomous Portfolio Agent
 
 ![Project Status](https://img.shields.io/badge/Status-Live-green)
 ![Tech Stack](https://img.shields.io/badge/Stack-FastAPI%20|%20React%20|%20LangChain-blue)
@@ -18,7 +18,7 @@ Unlike generic chatbots, this agent **cannot hallucinate**.
 * **Citations:** Responses include clickable citations (e.g., `[Source: main.py]`, `[Source: Profile.pdf]`) proving I actually did the work.
 
 ### 2. 📄 Tailored Document Generation
-The "Killer Feature" for recruiters:
+The Recruiter Value Driver:
 * **Input:** Paste any Job Description (JD).
 * **Process:** The AI maps my skills to the JD requirements.
 * **Output:** Instantly downloads a **Tailored CV (.docx)** and **Persuasive Cover Letter (.docx)** optimized for that specific role.
@@ -112,8 +112,7 @@ graph LR
   ```Bash
   python ingest.py
   ```
-
-6. You should see: "Success! Database created."
+You should see: "Success! Database created."
 
 **Run Servers**
 Backend:
@@ -130,10 +129,13 @@ Frontend:
   ```
  Running on http://localhost:5173
 
-The Screenshot of the Landing Page.
+**The Screenshot of the Landing Page.**
+
 ![1769550052886](image/README/1769550052886.png)
 
-The Screenshot of the Chat Interface.
+
+**The Screenshot of the Chat Interface.**
+
 ![1769550091723](image/README/1769550091723.png)
 ## 📄 License
 
