@@ -3,6 +3,7 @@
 ![Project Status](https://img.shields.io/badge/Status-Live-green)
 ![Tech Stack](https://img.shields.io/badge/Stack-FastAPI%20|%20React%20|%20LangChain-blue)
 ![AI Model](https://img.shields.io/badge/AI-GPT--4o-purple)
+[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen)](https://olajcodes-ai.vercel.app/)
 
 > **"Don't just read my CV. Interview my AI agent."**
 
