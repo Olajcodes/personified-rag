@@ -9,6 +9,7 @@
 
 This is not a static portfolio website. It is an **autonomous RAG (Retrieval-Augmented Generation) Agent** that represents me professionally. It ingests my entire digital footprint (GitHub code, LinkedIn profile, Technical Articles), indexes it into a Vector Database, and uses it to answer recruiter questions and generate tailored documents in real-time.
 
+🔗 Live Demo: [Personified RAG](https://olajcodes-ai.vercel.app/)
 ---
 
 ## 🚀 Key Features
