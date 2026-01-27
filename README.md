@@ -130,8 +130,10 @@ Frontend:
   ```
  Running on http://localhost:5173
 
+The Screenshot of the Landing Page.
 ![1769550052886](image/README/1769550052886.png)
 
+The Screenshot of the Chat Interface.
 ![1769550091723](image/README/1769550091723.png)
 ## 📄 License
 
