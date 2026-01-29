@@ -50,7 +50,7 @@ const LandingPage = ({ onStart, isDarkMode, toggleTheme }) => {
         {/* Left: Text Content */}
         <div className="flex-1 text-left">
           <h1 className={`text-5xl md:text-6xl font-bold leading-[1.15] mb-6 ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
-            Hire an AI Engineer <br />
+            I'm an AI Engineer <br />
             <span className="text-green-600">who builds Agents.</span>
           </h1>
           <p className={`text-lg mb-8 leading-relaxed max-w-lg ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>

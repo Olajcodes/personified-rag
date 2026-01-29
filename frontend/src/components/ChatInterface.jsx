@@ -15,7 +15,7 @@ const ChatInterface = ({ onBack, isDarkMode, toggleTheme }) => {
   const bottomRef = useRef(null);
 
   // Tools & UI State
-  const [showSidebar, setShowSidebar] = useState(true); 
+  const [showSidebar, setShowSidebar] = useState(false); 
   const [activeTab, setActiveTab] = useState('tools'); // 'tools' or 'history'
   const [jobDescription, setJobDescription] = useState('');
   const [generatingType, setGeneratingType] = useState(null); 
