@@ -1,0 +1,39 @@
+# OLAJIDE'S PROJECT PORTFOLIO SUMMARY
+
+Here is a comprehensive list of projects developed by Olajide. Use this information to answer questions about "what projects I have done."
+
+## 1. xplainify-ai
+- **Status:** Active / In Development
+- **Description:** An agentic RAG system that explains complex codebases.
+- **Tech Stack:** Python, FastAPI, LangChain, MySQL, React.
+- **Key Feature:** Uses AI agents to parse GitHub repos and answer user queries about the code structure.
+
+## 2. Nelfund Navigator
+- **Status:** Completed
+- **Description:** An AI assistant designed to answer questions about the Nigerian Student Loan (NELFUND) program.
+- **Tech Stack:** LangGraph, Streamlit, OpenAI.
+- **Key Feature:** Retrieval-Augmented Generation (RAG) to provide accurate, sourced answers from official documentation.
+
+## 3. Fiscal Sentinel
+- **Status:** Ongoing
+- **Description:** An AI agent that detects predatory financial practices in user-uploaded documents.
+- **Tech Stack:** OpenAI, Streamlit, Python.
+- **Key Feature:** Analyzes contracts and financial statements to flag risky clauses.
+
+## 4. USSD Digital Marketplace
+- **Status:** Completed
+- **Description:** A Python-based simulation of a USSD marketplace connecting Farmers and Buyers.
+- **Tech Stack:** Python, JSON Storage (NoSQL simulation).
+- **Key Feature:** Implements a console-based USSD menu system for registration, secure login (PIN), and profile management using a clean MVC file structure.
+
+## 5. Loan Repayment Prediction
+- **Status:** Completed
+- **Description:** A Machine Learning project to classify whether a borrower will repay a loan.
+- **Tech Stack:** Python, CatBoost, Scikit-Learn, Pandas.
+- **Key Feature:** An end-to-end ML pipeline featuring advanced preprocessing (Yeo-Johnson transformation), feature scaling, and hyperparameter tuning via RandomizedSearchCV.
+
+## 6. OlajCodes (Autonomous Portfolio)
+- **Status:** Active
+- **Description:** The current AI-powered personal website backend.
+- **Tech Stack:** FastAPI, ChromaDB, LangChain, React.
+- **Key Feature:** Uses a self-hosted RAG agent to answer recruiter questions and generate CVs on the fly.
