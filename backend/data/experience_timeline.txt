@@ -1,0 +1,70 @@
+# OLAJIDE ABDULLATEEF ABIOYE - PROFESSIONAL TIMELINE & EXPERIENCE
+# This document contains the AUTHORITATIVE dates for Olajide's experience.
+# INSTRUCTION TO AI: Use these dates to determine "Current" vs "Past" roles.
+
+## 1. CURRENT ROLES (Active as of Jan 2026)
+
+### **Awarri**
+- **Role:** Data Annotator
+- **Duration:** December 2025 – Present
+- **Status:** Active
+- **Location:** Abeokuta, Ogun State, Nigeria
+
+### **Zenvix Academy**
+- **Role:** IT Support Specialist
+- **Duration:** August 2025 – Present
+- **Status:** Active
+- **Location:** Lagos State, Nigeria
+
+### **PublicaAI**
+- **Role:** AI Engineer Intern
+- **Duration:** August 2025 – Present
+- **Status:** Active
+- **Location:** Abeokuta, Ogun State, Nigeria
+- **Key Skills:** AI Engineering, Python, Backend Development.
+
+---
+
+## 2. PAST EXPERIENCE (Completed)
+
+### **TIIDELab (AI Fellowship)**
+- **Role:** AI Fellow / AI Pre-Fellow
+- **Duration:** June 2024 – August 2025 (Total Duration)
+    - *AI Fellow:* Sept 2024 – Aug 2025
+    - *AI Pre-Fellow:* June 2024 – Aug 2024
+- **Status:** Completed
+- **Key Achievements:**
+    - **Most Outstanding Fellow (Pre-Fellowship):** Awarded during the Pre-Fellowship (June–Aug 2024) with a monetary prize.
+    - **Scholarship Recipient:** Earned an automatic scholarship to proceed to the main AI Fellowship (Sept 2024–Aug 2025) which included a monthly data subscription.
+    - Developed 'BriefIT' (Article summarizer app).
+    - Assistant Class Governor and Team Lead for Tech Pioneers.
+    - Gained hands-on experience in HTML, CSS, Python, and AI-driven backend technologies.
+
+### **Hamzatronics Technologies**
+- **Role:** Student Intern
+- **Duration:** May 2024 – October 2024
+- **Status:** Completed
+- **Location:** Abeokuta, Ogun State
+
+### **3MTT Nigeria (3 Million Technical Talent)**
+- **Role:** Software Engineer Intern (Cohort 1 Fellow)
+- **Duration:** December 2023 – May 2024
+- **Status:** Completed
+- **Key Achievements:**
+    - **Laptop Award:** Awarded a laptop for outstanding performance as a student in the program.
+    - Focused on software development and project-based training.
+
+### **TIIDELab (Web Development)**
+- **Role:** Software Fellow
+- **Duration:** March 2023 – May 2023
+- **Status:** Completed
+- **Details:** Internship focused on web development fundamentals, data analytics, and soft skills.
+
+---
+
+## 3. EDUCATION
+
+### **Federal University of Agriculture, Abeokuta (FUNAAB)**
+- **Degree:** Bachelor of Science (B.Sc.), Computer Science
+- **Duration:** January 2022 – May 2025
+- **Status:** Graduated
